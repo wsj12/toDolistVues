@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/vue.js"></script>
+	</head>
+	<body>
+		<div id="root">
+			<div>
+				<input type="text" v-model="todoValue"><!--inputValue实际上是data数据，而不是方法-->
+				<button @click="handleBtnClick">提交</button>
+				<ul>
+					<!--<li v-for="item in list">{{item}}</li>--><!--item 指list里的内容-->
+					<todo-item v-bind:content="item" v-for="item in list"></todo-item>
+					<!--todo-item组件将被template所替换-->
+				</ul>
+			</div>
+		</div>
+	<script>
+	
+//		局部组件的定义:
+//1.第一步，定义一个TodoItem子组件
+		var TodoItem = {
+		 	props:['content'],
+		 	template:"<li>{{content}}</li>"
+		 }
+		
+		var app = new Vue({
+			el:'#root',
+//第二步，申明子组件
+//把TodoItem注册到Vue实例 里
+			components:{
+//原先叫TodoItem，在vue实例里仍然叫TodoItem
+				TodoItem:TodoItem
+			},
+			data:{
+				list:[],
+				todoValue:''
+			},
+			methods:{
+				handleBtnClick:function  () {
+					this.list.push(this.todoValue); //alert如果弹出的是变量,就不能加引号
+//					第一个this是指data
+					this.todoValue=''
+					//把点击提交之后input框里的内容置空
+				}
+			}
+		})
+	
+	</script>
+	</body>
+	
+</html>

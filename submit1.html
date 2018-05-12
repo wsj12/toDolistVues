@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/vue.js"></script>
+	</head>
+	<body>
+		<div id="root">
+			<div>
+				<input type="text" v-model="todoValue"><!--inputValue实际上是data数据，而不是方法-->
+				<button @click="handleBtnClick">提交</button>
+				<ul>
+					<!--<li v-for="item in list">{{item}}</li>--><!--item 指list里的内容-->
+					<todo-item v-bind:content="item" v-for="item in list"></todo-item>
+				</ul>
+			</div>
+		</div>
+	<script>
+		Vue.component("TodoItem",{
+			//1.定义一个全局组件，组件的名字叫做TodoItem
+			//2.通过list看看到底循环多少个todo-item 
+			//3.通过v-bind方法借助content变量把item的值传递给todo-item
+			props:['content'],
+			//如果要使用父组件传递过来的值要在props里进行说明，要在props里进行content接收，
+			//同时模板里用到了content,组件就会把content的内容熏染出来
+			template:"<li>{{content}}</li>"
+		})
+		var app = new Vue({
+			el:'#root',
+			data:{
+				list:[],
+				todoValue:''
+			},
+			methods:{
+				handleBtnClick:function  () {
+					this.list.push(this.todoValue); //alert如果弹出的是变量,就不能加引号
+//					第一个this是指data
+					this.todoValue=''
+					//把点击提交之后input框里的内容置空
+				}
+			}
+		})
+	
+	</script>
+	</body>
+	
+</html>

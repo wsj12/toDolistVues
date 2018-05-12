@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/vue.js"></script>
+	</head>
+	<body>
+		<div id="root">
+			<div>
+				<input type="text" v-model="todoValue"><!--inputValue实际上是data数据，而不是方法-->
+				<button @click="handleBtnClick">提交</button>
+				<ul>
+					<!--<li v-for="item in list">{{item}}</li>--><!--item 指list里的内容-->
+					<todo-item @delete="handleteitemDelete" v-bind:index="index" v-bind:content="item" v-for="(item,index) in list"></todo-item>
+					<!--todo-item组件将被template所替换-->
+				</ul>
+			</div>
+		</div>
+	<script>
+//组件传值	
+//		局部组件的定义:
+//1.第一步，定义一个TodoItem子组件
+		var TodoItem = {
+		 	props:['content','index'],
+		 	//1.在li标签里绑定cilck事件
+		 	//2.alert出click
+		 	template:"<li @click='handleitemClick'>{{content}}</li>",
+		 	methods:{
+		 		handleitemClick:function(){
+		 			this.$emit("delete",this.index);//delete是一个指令
+		 		}
+		 	}
+		}
+		
+		var app = new Vue({
+			el:'#root',
+//第二步，申明子组件
+//把TodoItem注册到Vue实例 里
+			components:{
+
+				TodoItem:TodoItem//原先叫TodoItem，在vue实例里仍然叫TodoItem
+			},
+			data:{
+				list:[],
+				todoValue:''
+			},
+			methods:{
+				handleBtnClick:function  () {
+					this.list.push(this.todoValue); //alert如果弹出的是变量,就不能加引号
+//					第一个this是指data
+					this.todoValue=''
+					//把点击提交之后input框里的内容置空
+				},
+				handleteitemDelete:function  (index) {
+//					alert("delete");
+//					this.list=''
+//					alert(index);//打印下标
+					this.list.splice(index,1);
+				}
+			}
+		})
+	
+	</script>
+	</body>
+	
+</html>
